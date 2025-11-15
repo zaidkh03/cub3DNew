@@ -3,76 +3,103 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chatgpt <chatgpt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zalkhali <zalkhali@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/20 12:34:56 by chatgpt           #+#    #+#             */
-/*   Updated: 2024/05/20 12:34:56 by chatgpt          ###   ########.fr       */
+/*   Created: 2025/11/02 05:56:15 by zalkhali          #+#    #+#             */
+/*   Updated: 2025/11/15 19:35:59 by zalkhali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int gnl_has_newline(char *s)
+int	gnl_has_newline(char *s)
 {
-    size_t  i;
+	size_t	i;
 
-    if (!s)
-        return (0);
-    i = 0;
-    while (s[i])
-    {
-        if (s[i] == '\n')
-            return (1);
-        i++;
-    }
-    return (0);
+	if (!s)
+		return (0);
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == '\n')
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
-char    *gnl_join(char *s1, char *s2)
+char	*gnl_join(char *s1, char *s2)
 {
-    char    *res;
+	char	*res;
 
-    if (!s1)
-        s1 = ft_strdup("");
-    if (!s1 || !s2)
-        return (NULL);
-    res = ft_strjoin(s1, s2);
-    free(s1);
-    return (res);
+	if (!s1)
+		s1 = ft_strdup("");
+	if (!s1 || !s2)
+		return (NULL);
+	res = ft_strjoin(s1, s2);
+	free(s1);
+	return (res);
 }
 
-char    *gnl_extract(char *stash)
+char	*gnl_extract(char *stash)
 {
-    size_t  i;
-    char    *line;
+	size_t	i;
+	char	*line;
 
-    if (!stash || !stash[0])
-        return (NULL);
-    i = 0;
-    while (stash[i] && stash[i] != '\n')
-        i++;
-    if (stash[i] == '\n')
-        i++;
-    line = ft_substr(stash, 0, i);
-    return (line);
+	if (!stash || !stash[0])
+		return (NULL);
+	i = 0;
+	while (stash[i] && stash[i] != '\n')
+		i++;
+	if (stash[i] == '\n')
+		i++;
+	line = ft_substr(stash, 0, i);
+	return (line);
 }
 
-char    *gnl_trim(char *stash)
+char	*gnl_trim(char *stash)
 {
-    size_t  i;
-    char    *rest;
+	size_t	i;
+	char	*rest;
 
-    if (!stash)
-        return (NULL);
-    i = 0;
-    while (stash[i] && stash[i] != '\n')
-        i++;
-    if (!stash[i])
-    {
-        free(stash);
-        return (NULL);
-    }
-    rest = ft_strdup(stash + i + 1);
-    free(stash);
-    return (rest);
+	if (!stash)
+		return (NULL);
+	i = 0;
+	while (stash[i] && stash[i] != '\n')
+		i++;
+	if (!stash[i])
+	{
+		free(stash);
+		return (NULL);
+	}
+	rest = ft_strdup(stash + i + 1);
+	free(stash);
+	return (rest);
+}
+
+void	gnl_cleanup(int fd)
+{
+	char	**stash;
+	int		i;
+
+	stash = stash_table();
+	if (fd >= 0 && fd < FD_MAX)
+	{
+		if (stash[fd])
+		{
+			free(stash[fd]);
+			stash[fd] = NULL;
+		}
+		return ;
+	}
+	i = 0;
+	while (i < FD_MAX)
+	{
+		if (stash[i])
+		{
+			free(stash[i]);
+			stash[i] = NULL;
+		}
+		i++;
+	}
 }

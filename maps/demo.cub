@@ -1,8 +1,9 @@
 NO assets/textures/north.xpm
+
 SO assets/textures/south.xpm
 F  40    ,    40    ,   40     
 
-WE assets/textures/west.xpm
+WE assets/textures/west.xp
 EA assets/textures/east.xpm
                 C  120,160,                     220
 
